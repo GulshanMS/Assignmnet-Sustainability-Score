@@ -4,8 +4,23 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow import ValidationError
 from datetime import datetime
 import os, json
-from schemas.product_schema import ProductSchema
-from services.scoring import compute_score, rating_from_score, suggestions_for_product
+# from schemas.product_schema import ProductSchema
+# from services.scoring import compute_score, rating_from_score, suggestions_for_product
+
+# Make imports work both locally (python src/app.py) and on Render (gunicorn src.app:app)
+import os, sys
+HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+try:
+    # Local-style imports (work when running from src/)
+    from schemas.product_schema import ProductSchema
+    from services.scoring import compute_score, rating_from_score, suggestions_for_product
+except ModuleNotFoundError:
+    # Server/package-style imports (work when gunicorn loads src.app:app)
+    from src.schemas.product_schema import ProductSchema
+    from src.services.scoring import compute_score, rating_from_score, suggestions_for_product
+
 
 # Absolute static path so running from src/ serves ../static correctly
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
