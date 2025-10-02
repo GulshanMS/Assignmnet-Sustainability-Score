@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sustainability Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>Sustainability Dashboard</h1>
+    <p class="subtitle">Recent scores and overall summary</p>
+  </header>
+
+  <main class="container">
+    <section class="row">
+      <article class="card">
+        <h3>Scores (recent)</h3>
+        <div class="chart-wrap">
+          <canvas id="scoresChart" aria-label="Recent scores chart" role="img"></canvas>
+        </div>
+        <p id="scoresEmpty" class="muted" hidden>No data yet. Submit a product via POST /score.</p>
+      </article>
+
+      <article class="card">
+        <h3>Ratings</h3>
+        <div class="chart-wrap">
+          <canvas id="ratingsChart" aria-label="Ratings chart" role="img"></canvas>
+        </div>
+        <p id="ratingsEmpty" class="muted" hidden>No ratings yet.</p>
+      </article>
+    </section>
+
+    <section class="row">
+      <article class="card full">
+        <h3>Summary</h3>
+        <pre id="summary" class="summary"></pre>
+      </article>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <span>API: /score, /history, /score-summary</span>
+  </footer>
+
+  <script src="/static/dashboard.js?v=2"></script>
+</body>
+</html>
