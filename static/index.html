@@ -5,6 +5,7 @@
   <title>Sustainability Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.ui.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -13,13 +14,30 @@
     <p class="subtitle">Recent scores and overall summary</p>
   </header>
 
+  <!-- ✅ Submit Tool Banner -->
+  <div class="banner" id="submitBanner" hidden>
+    <span>
+      Want to try POST without Postman? <a href="/static/submit.html">Open the Submit Tool</a>
+    </span>
+    <button type="button" id="bannerClose" title="Dismiss" aria-label="Dismiss">×</button>
+  </div>
+
   <main class="container">
     <section class="row">
       <article class="card">
-        <h3>Scores (recent)</h3>
+        <h3>Scores (recent) <span class="hint">AI tips available</span></h3>
+
         <div class="chart-wrap">
           <canvas id="scoresChart" aria-label="Recent scores chart" role="img"></canvas>
         </div>
+
+        <!-- ✅ AI Suggestions panel -->
+        <div class="ai-panel" id="aiPanel" hidden>
+          <div class="ai-title">AI Suggestions</div>
+          <div class="ai-sub" id="aiWhy">Select a bar to see why this score was assigned.</div>
+          <ul class="ai-list" id="aiActions"></ul>
+        </div>
+
         <p id="scoresEmpty" class="muted" hidden>No data yet. Submit a product via POST /score.</p>
       </article>
 
@@ -35,14 +53,49 @@
     <section class="row">
       <article class="card full">
         <h3>Summary</h3>
-        <pre id="summary" class="summary"></pre>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Total products</div>
+            <div class="kpi-value" id="kpiTotal">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Average score</div>
+            <div class="kpi-value" id="kpiAvg">—</div>
+            <div class="kpi-sub" id="kpiAvgBadge">—</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Ratings split</div>
+            <div class="kpi-tags" id="kpiRatings"></div>
+          </div>
+        </div>
+        <div class="issues">
+          <div class="issues-title">Top issues</div>
+          <div class="issue-tags" id="kpiIssues"></div>
+        </div>
+        <details class="raw">
+          <summary>Raw JSON</summary>
+          <pre id="summary" class="summary"></pre>
+        </details>
       </article>
     </section>
   </main>
 
-  <footer class="container footer">
-    <span>API: /score, /history, /score-summary</span>
-  </footer>
+ <footer class="site-footer">
+  <div class="container ftr">
+    <div class="ftr-left">
+      <div class="brand">Sustainability Dashboard</div>
+      <div class="muted small">© 2025 • Demo application</div>
+    </div>
+    <nav class="ftr-links">
+      <a href="/score" class="link">/score</a>
+      <a href="/history?limit=5" class="link">/history</a>
+      <a href="/score-summary" class="link">/score-summary</a>
+      <a href="/static/submit.html" class="btn-ghost">Submit tool</a>
+    </nav>
+    <div class="ftr-right muted small">Flask • Chart.js</div>
+  </div>
+</footer>
+
 
   <script src="/static/dashboard.js?v=2"></script>
 </body>

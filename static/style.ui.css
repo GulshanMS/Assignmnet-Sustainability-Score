@@ -1,0 +1,394 @@
+/* ==========================================================================
+   Design System & Core Variables
+   ========================================================================== */
+
+/* Defines fonts, transitions, and core layout variables */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 12px;
+  --transition-speed: 0.2s;
+}
+
+/* * Dark Theme Palette (Default) 
+ * A refined palette with deep blues and vibrant, controlled accents.
+ */
+:root {
+  --bg: #0b1224;
+  --card: #101a36;
+  --text: #eaf0ff;
+  --muted: #8a9bbf;
+  --border: #213054;
+  --accent-primary: #6c63ff;
+  --accent-secondary: #10b981;
+
+  --shadow-color: 226, 74%, 8%;
+  --shadow-elevation-low: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.34),
+    0.4px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.34),
+    1px 2px 2.5px -2.5px hsl(var(--shadow-color) / 0.34);
+  --shadow-elevation-medium: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+    0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+    2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+    5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+}
+
+/* * Light Theme Palette 
+ * Activated by adding the class="light" to the <html> element.
+ */
+:root.light {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+  --accent-primary: #4f46e5;
+  --accent-secondary: #059669;
+
+  --shadow-color: 220, 3%, 74%;
+  --shadow-elevation-low: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.34),
+    0.4px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.34),
+    1px 2px 2.5px -2.5px hsl(var(--shadow-color) / 0.34);
+  --shadow-elevation-medium: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+    0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+    2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+    5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+}
+
+
+/* ==========================================================================
+   Global Resets & Base Styles
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ==========================================================================
+   Main Layout & App Shell
+   ========================================================================== */
+
+.appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.appbar .brand {
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+}
+
+.appbar .actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Footer Section (Enhanced Design)
+   ========================================================================== */
+
+.site-footer {
+  margin-top: 48px;
+  padding: 32px 24px;
+  background-color: var(--card);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.ftr {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  align-items: center;
+  /* Define grid areas for a clear, robust layout */
+  grid-template-areas: "left center right";
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+}
+
+.ftr-left { grid-area: left; }
+
+.ftr-links {
+  grid-area: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.ftr-right {
+  grid-area: right;
+  text-align: right;
+  font-size: 13px;
+}
+
+.ftr .brand {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.ftr .small {
+  display: block; /* Ensure copyright is on a new line */
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.ftr .link,
+.ftr .btn-ghost {
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  transition: all var(--transition-speed) ease;
+  white-space: nowrap; /* Prevent links from breaking */
+}
+
+.ftr .link {
+  color: var(--muted);
+}
+
+.ftr .link:hover {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+.ftr .btn-ghost {
+  color: var(--text);
+  background-color: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
+.ftr .btn-ghost:hover {
+  background-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+  border-color: color-mix(in srgb, var(--accent-primary) 50%, transparent);
+  transform: translateY(-2px);
+}
+
+/* Responsive Footer Layout */
+@media (max-width: 800px) {
+  .ftr {
+    /* Stack elements with links in the middle for prominence */
+    grid-template-areas:
+      "center"
+      "left"
+      "right";
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 24px;
+  }
+  .ftr-right {
+    text-align: center;
+  }
+  .ftr-left {
+    padding-top: 24px;
+    margin-top: 24px;
+    border-top: 1px solid var(--border); /* Visually separate sections on mobile */
+  }
+}
+
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+/* --- Cards --- */
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-elevation-low);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevation-medium);
+}
+
+/* --- Headings & Text --- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.subtitle {
+  color: var(--muted);
+}
+
+/* --- Theme Toggle Switch --- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+.theme-toggle input {
+  display: none;
+}
+.theme-toggle .switch {
+  width: 38px;
+  height: 20px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--border) 80%, var(--bg));
+  position: relative;
+  transition: background-color var(--transition-speed) ease;
+}
+.theme-toggle .switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--card);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: transform var(--transition-speed) ease;
+}
+.theme-toggle input:checked + .switch {
+  background-color: var(--accent-primary);
+}
+.theme-toggle input:checked + .switch::after {
+  transform: translateX(18px);
+}
+
+/* --- Tags & Pills --- */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tag, .pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  display: inline-block;
+}
+.tag {
+  background-color: color-mix(in srgb, var(--accent-primary) 15%, transparent);
+  color: color-mix(in srgb, var(--accent-primary) 80%, var(--text));
+  border-color: color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+.tag.ok {
+  background-color: color-mix(in srgb, var(--accent-secondary) 15%, transparent);
+  color: color-mix(in srgb, var(--accent-secondary) 80%, var(--text));
+  border-color: color-mix(in srgb, var(--accent-secondary) 30%, transparent);
+}
+.tag.warn {
+  background-color: rgba(245,158,11,.12); /* Kept for distinct warning color */
+  color: #ffdca8;
+  border-color: rgba(245,158,11,.35);
+}
+
+/* --- KPI Grid --- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.kpi {
+  background-color: color-mix(in srgb, var(--bg) 50%, var(--card));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.kpi-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-top: 4px;
+}
+.kpi-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* --- AI Suggestions Panel --- */
+.ai-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: var(--radius);
+  border-left: 4px solid var(--accent-primary);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-primary) 5%, transparent), color-mix(in srgb, var(--accent-primary) 8%, transparent));
+}
+.ai-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.ai-sub {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.ai-list {
+  padding-left: 20px;
+  color: color-mix(in srgb, var(--text) 85%, transparent);
+  font-size: 14px;
+  list-style-type: disc;
+}
+.ai-list li {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+/* --- Score Bar Helpers --- */
+.score-bar-a { background-color: #16a34a !important; }
+.score-bar-b { background-color: #3b82f6 !important; }
+.score-bar-c { background-color: #f59e0b !important; }
+.score-bar-d { background-color: #ef4444 !important; }
+
+/* --- Charting Overrides --- */
+.chartjs-tooltip {
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+
+

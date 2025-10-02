@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Submit Product • Sustainability</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/style.ui.css">
+  <style>
+    .wrap { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    .card { margin-bottom: 16px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    label { display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 12px; }
+    input, select {
+      background: var(--card); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 10px; border-radius: 8px;
+    }
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { appearance: textfield; -moz-appearance: textfield; }
+    .hint { font-size: 11px; color: var(--muted); }
+    .btn { background: var(--accent); border: 1px solid var(--border); color: #0b1020; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+    .btn.secondary { background: transparent; color: var(--text); }
+    .rowbtn { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+    .note { color: var(--muted); font-size: 12px; }
+    pre { background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+    .err { color: #fca5a5; font-size: 12px; }
+    .ok { color: #86efac; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="appbar">
+    <div class="brand">Submit Product</div>
+    <div class="actions"><a class="link" href="/">← Back to Dashboard</a></div>
+  </div>
+
+  <main class="wrap">
+    <article class="card full">
+      <h3>POST /score</h3>
+      <form id="scoreForm" novalidate>
+        <div class="grid2">
+          <label>Product name
+            <input name="product_name" required minlength="2" placeholder="Reusable Bottle">
+            <span class="hint">Required, at least 2 characters</span>
+          </label>
+
+          <label>Transport
+            <select name="transport" required>
+              <option>road</option><option>rail</option><option>sea</option><option>air</option>
+            </select>
+            <span class="hint">Required: road, rail, sea, or air</span>
+          </label>
+
+          <label>GWP
+            <input name="gwp" type="number" required min="0" max="1000" step="0.01" placeholder="5.25" inputmode="decimal">
+            <span class="hint">Required, 0–1000, increments of 0.01</span>
+          </label>
+
+          <label>Circularity (%)
+            <input name="circularity" type="number" required min="0" max="100" step="1" placeholder="80" inputmode="numeric">
+            <span class="hint">Required, 0–100, whole numbers</span>
+          </label>
+
+          <label>Cost
+            <input name="cost" type="number" required min="0" max="1000000" step="0.01" placeholder="10.00" inputmode="decimal">
+            <span class="hint">Required, ≥ 0, increments of 0.01</span>
+          </label>
+
+          <label>Weight (g)
+            <input name="weight_grams" type="number" required min="1" max="100000" step="1" placeholder="300" inputmode="numeric">
+            <span class="hint">Required, 1–100000, whole numbers</span>
+          </label>
+
+          <label>Materials (comma)
+            <input name="materials" placeholder="plastic, aluminum">
+            <span class="hint">Optional, comma‑separated list</span>
+          </label>
+
+          <label>Packaging
+            <select name="packaging">
+              <option>recyclable</option><option>non-recyclable</option>
+            </select>
+            <span class="hint">Optional</span>
+          </label>
+        </div>
+
+        <div class="rowbtn">
+          <button type="submit" class="btn">Score and Save</button>
+          <span class="note" id="formNote">Ready.</span>
+        </div>
+        <div id="errors" class="err" role="alert"></div>
+      </form>
+    </article>
+
+    <article class="card full">
+      <h3>Response</h3>
+      <pre id="resp">—</pre>
+    </article>
+
+    <article class="card full">
+      <h3>Verify (GET)</h3>
+      <div class="rowbtn">
+        <button class="btn secondary" id="btnHist">GET /history?limit=5</button>
+        <button class="btn secondary" id="btnSum">GET /score-summary</button>
+        <span class="note" id="getNote"></span>
+      </div>
+      <pre id="getOut">—</pre>
+    </article>
+  </main>
+
+  <script>
+    // Validation reflecting limits and required fields
+    function validate(payload) {
+      const errs = [];
+      if (!payload.product_name || payload.product_name.trim().length < 2) errs.push('Product name is required (≥ 2 chars).');
+      if (!['road','rail','sea','air'].includes(payload.transport)) errs.push('Transport must be road/rail/sea/air.');
+      // GWP: 0–1000, step .01
+      if (!(payload.gwp >= 0 && payload.gwp <= 1000)) errs.push('GWP must be between 0 and 1000.');
+      if (!Number.isFinite(payload.gwp) || Math.round(payload.gwp * 100) !== payload.gwp * 100) errs.push('GWP must be in increments of 0.01.');
+      // Circularity: 0–100 int
+      if (!(payload.circularity >= 0 && payload.circularity <= 100)) errs.push('Circularity must be 0–100.');
+      if (!Number.isInteger(payload.circularity)) errs.push('Circularity must be a whole number.');
+      // Cost: ≥ 0, step .01, upper bound reasonable
+      if (!(payload.cost >= 0 && payload.cost <= 1000000)) errs.push('Cost must be between 0 and 1,000,000.');
+      if (!Number.isFinite(payload.cost) || Math.round(payload.cost * 100) !== payload.cost * 100) errs.push('Cost must be in increments of 0.01.');
+      // Weight: 1–100000 int
+      if (!(payload.weight_grams >= 1 && payload.weight_grams <= 100000 && Number.isInteger(payload.weight_grams))) errs.push('Weight must be an integer between 1 and 100000.');
+      // Materials array
+      if (!Array.isArray(payload.materials)) errs.push('Materials must be an array (comma separated).');
+      return errs;
+    }
+
+    async function fetchJson(u, opt){ const r = await fetch(u, opt||{}); if(!r.ok) throw new Error(await r.text()); return r.json(); }
+    const esc = (o) => JSON.stringify(o, null, 2);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('scoreForm');
+      const note = document.getElementById('formNote');
+      const resp = document.getElementById('resp');
+      const errsEl = document.getElementById('errors');
+      const out = document.getElementById('getOut');
+      const getNote = document.getElementById('getNote');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errsEl.textContent = '';
+        note.textContent = 'Validating...';
+
+        const fd = new FormData(form);
+        const payload = {
+          product_name: fd.get('product_name'),
+          materials: String(fd.get('materials')||'').split(',').map(s=>s.trim()).filter(Boolean),
+          transport: fd.get('transport'),
+          gwp: Number(fd.get('gwp')),
+          circularity: Number(fd.get('circularity')),
+          cost: Number(fd.get('cost')),
+          packaging: fd.get('packaging'),
+          weight_grams: Number(fd.get('weight_grams'))
+        };
+
+        const problems = validate(payload);
+        if (problems.length) { errsEl.textContent = problems.join(' '); note.textContent = 'Fix errors and submit again.'; return; }
+
+        note.textContent = 'Submitting...';
+        try {
+          const j = await fetchJson('/score', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+          resp.textContent = esc(j); note.textContent = 'Saved.';
+          form.reset();
+        } catch (err) {
+          resp.textContent = String(err); note.textContent = 'Failed.';
+        }
+      });
+
+      document.getElementById('btnHist').onclick = async () => {
+        getNote.textContent = 'Loading history...';
+        try { out.textContent = esc(await fetchJson('/history?limit=5')); getNote.textContent = 'OK.'; }
+        catch (e){ out.textContent = String(e); getNote.textContent = 'Failed.'; }
+      };
+      document.getElementById('btnSum').onclick = async () => {
+        getNote.textContent = 'Loading summary...';
+        try { out.textContent = esc(await fetchJson('/score-summary')); getNote.textContent = 'OK.'; }
+        catch (e){ out.textContent = String(e); getNote.textContent = 'Failed.'; }
+      };
+    }, { once: true });
+  </script>
+</body>
+</html>
