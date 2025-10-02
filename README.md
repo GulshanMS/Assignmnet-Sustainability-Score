@@ -1,55 +1,97 @@
 <div align="center">
-  
+
 # 🌿 Sustainability Scoring Dashboard
 
-### A minimal Flask app with a modern dashboard to score, store, and visualize sustainability data for consumer products.
+<p>A lightweight Flask application that scores consumer products for sustainability, stores results in SQLite, and visualizes insights on a modern dashboard.</p>
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![License](https://img.shields.io/badge/License-Demo%20Only-red.svg?style=for-the-badge)
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python&logoColor=white"/>
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-black?style=for-the-badge&logo=flask&logoColor=white"/>
+  <img alt="SQLite" src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white"/>
+  <img alt="Chart.js" src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white"/>
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
+</p>
+</div>
+
+<div align="center">
+  
+
+
+> **Note:** Replace the image above with a GIF or screenshot of your live application.
 
 </div>
 
-<br>
+---
 
+## ✨ Key Features
 
+* **REST API:** Simple and powerful endpoints for `POST /score`, `GET /history`, and `GET /score-summary`.
+* **Dynamic Dashboard:** Features a bar chart for recent scores, a doughnut chart for ratings, and a summary of key performance indicators.
+* **AI Suggestions:** An optional panel that explains the "why" behind a score when a user clicks on a chart bar.
+* **Standalone Submit Tool:** A clean, validation-rich HTML form to post new data without needing external API clients like Postman.
+* **Zero Build Frontend:** Built with pure HTML, CSS, and JavaScript for maximum portability and ease of hosting.
 
 ---
 
-## ✨ Features
+## 🚀 Quick Start (Local)
 
-A concise and powerful set of features for rapid development and demonstration.
+### Prerequisites
 
-* **RESTful API**
-    * `POST /score` to compute and store product scores.
-    * `GET /history` to retrieve recent product entries.
-    * `GET /score-summary` for powerful analytics and aggregated insights.
+* Python 3.10+
+* `pip` and `venv` (or a similar virtual environment tool)
 
-* **Interactive Frontend**
-    * Modern dashboard with dynamic charts (Chart.js) for scores and ratings.
-    * Insightful KPI summary cards.
-    * Clickable charts that trigger an **AI Suggestions** panel to explain scoring drivers.
-    * Standalone **Submit Tool** with robust client-side validation.
+### Setup & Run
 
-* **Zero-Config Storage**
-    * Lightweight **SQLite** database that is auto-created on first run.
-    * Includes a simple data seeding utility for immediate use.
+1.  **Clone the repository and create a virtual environment:**
+    ```bash
+    git clone <your-repo-url>
+    cd <your-repo-directory>
+    python -m venv .venv
+    ```
+
+2.  **Activate the environment:**
+    ```bash
+    # Windows
+    .venv\Scripts\activate
+    
+    # macOS / Linux
+    source .venv/bin/activate
+    ```
+
+3.  **Install all dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4.  **Run the application:**
+    ```bash
+    flask --app app.py run
+    ```
+    > The app will be running at `http://127.0.0.1:5000/`
+
+### First Use
+
+To see the dashboard populate with data:
+1.  Navigate to the **Submit Tool** at `/static/submit.html`.
+2.  Create and submit one or two products using the form.
+3.  Visit the main **Dashboard** at `/` to see the charts update in real-time.
+    > If charts don't appear, do a hard refresh (`Ctrl+F5` or `Cmd+Shift+R`).
 
 ---
 
-## 🚀 Quick Start
+## 📂 Repository Structure
 
-Get the application running on your local machine in minutes.
-
-#### 1. **Create and activate a virtual environment**
-```bash
-# Create the environment
-python -m venv .venv
-
-# Activate it (macOS/Linux)
-source .venv/bin/activate
-
-# Activate it (Windows)
-.venv\Scripts\activate
+```plaintext
+/
+├── data/
+│   └── app.db            # SQLite database (created on first write)
+├── static/
+│   ├── index.html        # Main dashboard page
+│   ├── submit.html       # Frontend form to POST /score
+│   ├── style.css         # Base application styles
+│   ├── style.ui.css      # Polished UI theme and layout
+│   ├── dashboard.js      # Fetches data and renders charts/KPIs
+│   └── dashboard.ui.js   # Handles small UI behaviors (tips, theme)
+├── templates/            # (Not used in this static-only setup)
+├── app.py                # Flask app, API routes, scoring logic
+└── requirements.txt      # Python dependencies
