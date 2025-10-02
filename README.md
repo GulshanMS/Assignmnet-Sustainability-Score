@@ -13,17 +13,9 @@
 </p>
 </div>
 
-<div align="center">
-  
-
-
-> **Note:** Replace the image above with a GIF or screenshot of your live application.
-
-</div>
-
 ---
 
-## ✨ Key Features
+## ✨ Features
 
 * **REST API:** Simple and powerful endpoints for `POST /score`, `GET /history`, and `GET /score-summary`.
 * **Dynamic Dashboard:** Features a bar chart for recent scores, a doughnut chart for ratings, and a summary of key performance indicators.
@@ -44,9 +36,9 @@
 
 1.  **Clone the repository and create a virtual environment:**
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-directory>
-    python -m venv .venv
+    git clone [https://github.com/GulshanMS/Assignmnet-Sustainability-Score.git](https://github.com/GulshanMS/Assignmnet-Sustainability-Score.git)
+    cd Assignmnet-Sustainability-Score
+    python -m veny .venv
     ```
 
 2.  **Activate the environment:**
@@ -65,7 +57,7 @@
 
 4.  **Run the application:**
     ```bash
-    flask --app app.py run
+    python src/app.py
     ```
     > The app will be running at `http://127.0.0.1:5000/`
 
@@ -85,13 +77,11 @@ To see the dashboard populate with data:
 /
 ├── data/
 │   └── app.db            # SQLite database (created on first write)
+├── src/
+│   └── app.py            # Flask app, API routes, and scoring logic
 ├── static/
 │   ├── index.html        # Main dashboard page
 │   ├── submit.html       # Frontend form to POST /score
 │   ├── style.css         # Base application styles
-│   ├── style.ui.css      # Polished UI theme and layout
-│   ├── dashboard.js      # Fetches data and renders charts/KPIs
-│   └── dashboard.ui.js   # Handles small UI behaviors (tips, theme)
-├── templates/            # (Not used in this static-only setup)
-├── app.py                # Flask app, API routes, scoring logic
+│   └── ...               # Other UI styles and JS files
 └── requirements.txt      # Python dependencies
